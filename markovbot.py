@@ -46,6 +46,7 @@ def markov(model):
 def markovcache():
     for c in config:
         while len(c['cache']) <= 10:
+            print("Generating cache for {0}.".format(c['username']))
             m = markov(c['model'])
             c['cache'].append(m)
 
