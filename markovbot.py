@@ -58,7 +58,7 @@ for c in config:
     else:
         c['model'] = markovify.Text(text)
 
-print("Generating markov phrases. If this takes too long, your source text may be too short.\n".format(former, latter))
+print("Generating markov phrases. If this takes too long, your source text may be too short.\n")
 markovcache()
 
 
@@ -102,13 +102,13 @@ async def on_message(message):
     if message.author.bot or message.author == client.user:
         return
 
-    if message.content.lower().split(' ')[0] == command or message.content.lower().split(' ')[0] == altcommand:
+    if message.content.lower().split()[0] == command or message.content.lower().split()[0] == altcommand:
 
         if len(config) == 1:
             await sendmarkov(config[0], message)
             return
 
-        arg = message.content.lower()[len(command):]
+        arg = message.content.lower().split()[1]
 
         for c in config:
             if c['command'] == arg:
