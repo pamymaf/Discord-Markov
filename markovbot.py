@@ -20,7 +20,7 @@ textdir = "logs/"
 config = [
   {
     'filename': 'test.txt',
-    'command': 'test'
+    'command': 'test',
     'username': 'Test User',
     'newline': True,
     'model': None,
@@ -39,12 +39,12 @@ altcommand = ".mk"
 
 for c in config:
     with open(textdir+c['filename']) as t:
-		text = t.read()
+        text = t.read()
 
-	if c['newline']:
-		c['model'] = markovify.text.NewlineText(text)
-	else:
-		c['model'] = markovify.Text(text)
+    if c['newline']:
+        c['model'] = markovify.text.NewlineText(text)
+    else:
+        c['model'] = markovify.Text(text)
 
 print("Generating markov phrases. If this takes too long, your source text is too short or has to be delimited by {0} instead of {1}.\n".format(former, latter))
 await markovcache()
@@ -62,22 +62,22 @@ async def on_message(message):
         return
 
     if message.content.lower().split(' ')[0] == command or message.content.lower().split(' ')[0] == altcommand:
-    	arg = message.content.lower()[len(command):]
+        arg = message.content.lower()[len(command):]
 
-    	for c in config:
-    		if c['command'] == arg:
-    			if len(c['cache']) == 0:
-    				await markovcache()
+        for c in config:
+            if c['command'] == arg:
+                if len(c['cache']) == 0:
+                    await markovcache()
 
-    			msg = c['cache'].pop()
-    			await client.send_messag(message.channel, msg)
+                msg = c['cache'].pop()
+                await client.send_messag(message.channel, msg)
 
-    			if message.channel.is_private:
-    				print("PM with {0.author}\n{1}\n".format(message, msg[1:]))
-    			else:
-    				print("{0.server.name}#{0.channel.name}\n{1}\n".format(message, msg[1:]))
+                if message.channel.is_private:
+                    print("PM with {0.author}\n{1}\n".format(message, msg[1:]))
+                else:
+                    print("{0.server.name}#{0.channel.name}\n{1}\n".format(message, msg[1:]))
 
-    			await markovcache()
+                await markovcache()
 
 async def markov(model):
     m = None
@@ -86,10 +86,10 @@ async def markov(model):
     return "\u200b"+m.encode("ascii","backslashreplace").decode("unicode-escape")
 
 async def markovcache():
-	for c in config:
-	    while len(c['cache']) <= 10:
-    	    m = await markov(c['model'])
-        	c['cache'].append(m)
+    for c in config:
+        while len(c['cache']) <= 10:
+            m = await markov(c['model'])
+            c['cache'].append(m)
 
 
 client.run(bottoken)
