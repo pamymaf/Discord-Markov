@@ -13,6 +13,7 @@ textdir = "logs/"
 # Filename is the name of the file within the above directory
 # Command is the argument used for calling this markov
 # Username is the name of the user (for changing nicknames). If it is set to None, it will not change the nickname
+# Avatar is the file name of the avatar for this user. If it is set to None, it will not change the avatar. It looks for the avatar in the same directory as the logs
 # Newline set to False if you want it to seperate sentences based on periods instead of newlines
 # Model shouldn't be touched
 # Cache shouldn't be touched
@@ -23,11 +24,17 @@ config = [
     'username': None,
     # Example to set the nickname:
     # 'username': 'Test User',
+    'avatar': None,
+    # Example to set the avatar:
+    # 'avatar': 'test.png'
     'newline': True,
     'model': None,
     'cache': []
   }
  ]
+
+# Default avatar name
+defaultavatar = 'avatar.png'
 
 # Bot token goes here
 bottoken = "MTg3ODE4MDI4NjQwMTA4NTQ0.CrGbBQ.syQBhtEptt9mNSGcKG0O2a_sres"
@@ -85,11 +92,27 @@ async def sendmarkov(markov, message):
             except:
                 print("Tried to change nickname on {0.server.name}, failed.".format(message))
 
+        if markov['avatar']:
+            try:
+                with open(textdir+markov['avatar']) as a:
+                    avvy = a.read()
+                await client.change_profile(avatar=avvy)
+            except:
+                print("Tried to change avatar, failed.")
+
         await client.send_message(message.channel, msg)
 
         if markov['username']:
             try:
                await client.change_nickname(message.server.me, oldname)
+            except:
+                pass
+
+        if markov['avatar']:
+            try:
+                with open(defaultavatar) as a:
+                    avvy = a.read()
+                await client.change_profile(avatar=avvy)
             except:
                 pass
 
@@ -100,6 +123,9 @@ async def sendmarkov(markov, message):
 @client.event
 async def on_ready():
     print('Logged in as:\n{0.name}, {0.id}\n'.format(client.user))
+    with open(defaultavatar) as a:
+        avvy = a.read()
+    await client.change_profile(avatar=avvy)
 
 @client.event
 async def on_message(message):
