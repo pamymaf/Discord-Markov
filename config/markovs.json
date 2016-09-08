@@ -3,16 +3,16 @@
         "name": "koopa",
         "nickname": "KoopaKiy",
         "avatar": "koopa.png",
-        "newlines": True,
-        "model": None,
+        "newline": "True",
+        "model": "None",
         "cache": []
     },
     {
         "name": "text",
-        "nickname": None,
-        "avatar": None,
-        "newlines": True,
-        "model": None,
+        "nickname": "None",
+        "avatar": "None",
+        "newline": "True",
+        "model": "None",
         "cache": []
     }
 ]

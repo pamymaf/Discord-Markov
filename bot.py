@@ -51,30 +51,31 @@ class MyBot(discord.Client):
 
             if content == 'help':
                 avail = []
-                for m in self.markov:
+                for m in self.marko.data:
                     avail.append('`'+self.config.prefix+m['name']+'`')
                 msg = "Available commands:\n"
                 avail = ', '.join(avail)
                 msg += avail
-                self.safe_send_message(message.channel, msg)
+                await self.safe_send_message(message.channel, msg)
+                return
 
-            if content in self.markov:
+            if content in self.markov.data:
                 msg = self.markov.getmarkov(content)
 
-                for m in self.markov:
+                for m in self.markov.data:
                     if m['name'] == content:
                         current = m
 
                 if message.channel.is_private:
-                    self.safe_send_message(message.channel, msg)
+                    await self.safe_send_message(message.channel, msg)
 
                 else:
                     oldname = message.server.me.display_name
-                    self.safe_change_nickname(message.server, current['nickname'])
-                    self.safe_change_avatar('avatars/'+current['avatar'])
-                    self.safe_send_message(message.channel, msg)
-                    self.safe_change_nickname(message.server, oldname)
-                    self.safe_change_avatar('avatars/default.png')
+                    await self.safe_change_nickname(message.server, current['nickname'])
+                    await self.safe_change_avatar('avatars/'+current['avatar'])
+                    await self.safe_send_message(message.channel, msg)
+                    await self.safe_change_nickname(message.server, oldname)
+                    await self.safe_change_avatar('avatars/default.png')
 
 
 if __name__ == '__main__':
