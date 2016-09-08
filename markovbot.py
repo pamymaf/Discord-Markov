@@ -59,14 +59,14 @@ for c in config:
         c['model'] = markovify.Text(text)
 
 print("Generating markov phrases. If this takes too long, your source text may be too short.\n".format(former, latter))
-await markovcache()
+markovcache()
 
 
 client = discord.Client()
 
 async def sendmarkov(dict, message):
     if len(dict['cache']) == 0:
-        await markovcache()
+        markovcache()
 
     msg = c['cache'].pop()
 
@@ -88,7 +88,7 @@ async def sendmarkov(dict, message):
     else:
         print("{0.server.name}#{0.channel.name}\n{1}\n".format(message, msg[1:]))
 
-    await markovcache()
+    markovcache()
 
 @client.event
 async def on_ready():
