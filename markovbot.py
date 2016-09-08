@@ -6,22 +6,23 @@ import asyncio
 # CONFIG #
 ##########
 
-# Set this to the path where your texts are. This should be a folder that contains .txt files with the name of the chain/command
-# Example: road.txt is a chain triggered by the 'road' command
+# Set this to the path where your .txts are. This should be a folder that contains .txt files with the name of the chain/command
 textdir = "logs/"
 
 # Dictonaries with the files and options
 # Filename is the name of the file within the above directory
 # Command is the argument used for calling this markov
-# Username is the name of the user (for changing nicknames)
+# Username is the name of the user (for changing nicknames). If it is set to None, it will not change the nickname
 # Newline set to False if you want it to seperate sentences based on periods instead of newlines
 # Model shouldn't be touched
 # Cache shouldn't be touched
 config = [
   {
-    'filename': 'test.txt',
+    'filename': 'text.txt',
     'command': 'test',
-    'username': 'Test User',
+    'username': None,
+    # Example to set the nickname:
+    # 'username': 'Test User',
     'newline': True,
     'model': None,
     'cache': []
@@ -78,17 +79,19 @@ async def sendmarkov(markov, message):
     else:
         oldname = message.server.me.display_name
 
-        try:
-           await client.change_nickname(message.server.me, markov['username'])
-        except:
-            print("Tried to change nickname on {0.server.name}, failed.".format(message))
+        if markov['username']:
+            try:
+               await client.change_nickname(message.server.me, markov['username'])
+            except:
+                print("Tried to change nickname on {0.server.name}, failed.".format(message))
 
         await client.send_message(message.channel, msg)
 
-        try:
-           await client.change_nickname(message.server.me, oldname)
-        except:
-            pass
+        if markov['username']:
+            try:
+               await client.change_nickname(message.server.me, oldname)
+            except:
+                pass
 
         print("{0.server.name}#{0.channel.name}\n{1}:{2}\n".format(message, markov['username'], msg[1:]))
 
