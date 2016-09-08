@@ -21,11 +21,19 @@ altcommand = ".mk"
 
 ################
 
+if newline:
+    former, latter = "periods", "newlines"
+else:
+    former, latter = "newlines", "periods"
+
+print("Generating markov phrases. If this takes too long, your source text is too short or has to be delimited by {0} instead of {1}.\n".format(former, latter))
+await markovcache()
+
+
 client = discord.Client()
 
 @client.event
 async def on_ready():
-    await markovcache()
     print('Logged in as:\n{0.name}, {0.id}\n'.format(client.user))
 
 @client.event
