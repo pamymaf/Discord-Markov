@@ -1,18 +1,18 @@
 [
-	{
-		"name": "koopa",
-		"nickname": "KoopaKiy",
-		"avatar": "koopa.png",
-		"newlines": True,
-		"model": None,
-		"cache": []
-	},
-	{
-		"name": "text",
-		"nickname": None,
-		"avatar": None,
-		"newlines": True,
-		"model": None,
-		"cache": []
-	}
+    {
+        "name": "koopa",
+        "nickname": "KoopaKiy",
+        "avatar": "koopa.png",
+        "newlines": True,
+        "model": None,
+        "cache": []
+    },
+    {
+        "name": "text",
+        "nickname": None,
+        "avatar": None,
+        "newlines": True,
+        "model": None,
+        "cache": []
+    }
 ]
