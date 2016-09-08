@@ -64,29 +64,32 @@ markovcache()
 
 client = discord.Client()
 
-async def sendmarkov(dict, message):
-    if len(dict['cache']) == 0:
+async def sendmarkov(markov, message):
+    if len(markov['cache']) == 0:
         markovcache()
 
     msg = c['cache'].pop()
 
-    if not message.channel.is_private:
+    if message.channel.is_private:
+        await client.send_message(message.channel, msg)
+        print("PM with {0.author}\n{1}:{2}\n".format(message, markov['username'], msg[1:]))
+
+    else:
+        oldname = message.server.me.display_name
+
         try:
-            oldname = message.server.me.display_name
-            await client.change_nickname(message.server.me, c['username'])
+           await client.change_nickname(message.server.me, markov['username'])
         except:
             print("Tried to change nickname on {0.server.name}, failed.".format(message))
 
-    await client.send_message(message.channel, msg)
+        await client.send_message(message.channel, msg)
 
-    if not message.channel.is_private:
         try:
-            await client.change_nickname(message.server.me, oldname)
+           await client.change_nickname(message.server.me, oldname)
+        except:
+            pass
 
-    if message.channel.is_private:
-        print("PM with {0.author}\n{1}\n".format(message, msg[1:]))
-    else:
-        print("{0.server.name}#{0.channel.name}\n{1}\n".format(message, msg[1:]))
+        print("{0.server.name}#{0.channel.name}\n{1}:{2}\n".format(message, markov['username'], msg[1:]))
 
     markovcache()
 
